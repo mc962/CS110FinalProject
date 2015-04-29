@@ -5,6 +5,7 @@ WarGameGUI, and then facillitates appropriate image display*/
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class CardPanel extends JFrame
 {
@@ -19,16 +20,11 @@ public class CardPanel extends JFrame
    private String fileString;
    private String filePathString;
    
-   private JPanel imagePanel;
+ //  private JPanel imagePanel;
    private JLabel imageLabel;
    private ImageIcon cardImage;
+   private File imageFile;
    
-//    public CardPanel()
-//    {
-//       pictureString = "back";
-//       fileString = pictureString.concat(FILETYPE);
-//       filePathString = PATH.concat(fileString);
-//    }
 /**constructor that accepts integer arguments for suit and rank from the function that called it
 @param s represents the integer suit value
 @param r repreesents the integer rank value*/   
@@ -119,45 +115,69 @@ public class CardPanel extends JFrame
       pictureString = rankString.concat(suitString);
       fileString = pictureString.concat(FILETYPE);
       filePathString = PATH.concat(fileString);
-      
-      ////////////////GUI bit////////////////////
-      //setTitle("Card Test");////hide later
-      builImagePanel();
-      //add(imagePanel);
-      //pack();
-     // setVisible(true);
+       imageFile = new File(filePathString);
+// exception handling in the event of no files being found
+// theoretically the game could continue, but I chose to end the game in this case, as there is 
+// quite a lot of data missing, so i just told them to contact who gave them the game for the files
+      try
+      {
+// calls buildImagePanel to make what was necessary     
+         buildImagePanel();       
+      }
+      catch (FileNotFoundException f)
+      {      
+         JOptionPane.showMessageDialog(null,"Card image not found. Contact game distributor for proper game files.\n\n"
+                                             +"Click OK to exit.");
+         System.exit(0);
+      }
    }
+/**returns the value stored in filePathString
+@return filePathString returns the string associated with the particular path of the picture file
+*/   
    public String getPath()
    {
       return filePathString;
    }
-   
+/**toString method to print what is stored
+@return str represents the value stored in str (filePathString
+*/   
    public String toString()
    {
       String str = filePathString;
       return str;
    }
    ////////////////
-   private void builImagePanel()
+/**private method to build the image information
+@exception FileNotFoundException can throw this exception in the event that the picture file was not found
+*/   
+   private void buildImagePanel() throws FileNotFoundException
    {
-      //imagePanel = new JPanel();
-      cardImage = new ImageIcon(filePathString);
-      imageLabel = new JLabel(cardImage, SwingConstants.CENTER);
-      //imagePanel.add(imageLabel);
+// if the imageFile was found to not exist, then a FileNotFoundException is thrown
+      if(!imageFile.exists())
+      {
+         throw new FileNotFoundException("Picture not found");
+      }
+// otherwise program proceeds normally
+      else
+      {
+         cardImage = new ImageIcon(filePathString);
+         imageLabel = new JLabel(cardImage, SwingConstants.CENTER);        
+      }   
    }
+/** gets the image stored in cardImage
+@return cardImage represents the ImageIcon image grabbed with the filePathString
+*/   
    public ImageIcon getImage()
    {
       return cardImage;
-      // ImageIcon faceDownCard = new ImageIcon("/home/michael/Desktop/Java/cardpics/back.jpg");
-//       JLabel faceDown1 = new JLabel(faceDownCard, SwingConstants.CENTER);   
-//       JLabel faceDown2 = new JLabel(faceDownCard, SwingConstants.CENTER);
    }
    ////////////////
-   public static void main(String[] args)
-   {
-      CardPanel panel = new CardPanel(3,12);
-      System.out.println(panel);
-        new CardPanel(4,2);
-   }
+//    public static void main(String[] args)
+//    {
+//       CardPanel panel = new CardPanel(3,12);
+//       System.out.println(panel);
+//         new CardPanel(4,2);
+// 
+//    }
    ////////////////
 }

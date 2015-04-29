@@ -21,12 +21,26 @@ public class Card
 @param suit represents inputted value of the suit
 @param rank represents the inputted value of the rank
 */
-   public Card(int suit, int rank)
+   public Card(int suit, int rank) throws IllegalArgumentException
    {
+      if (suit <SPADES || suit >DIAMONDS)
+      {
+         throw new IllegalArgumentException(suit + " suit is out of bounds");
+      }
+      else
+      {
 // sets a reference suit variable equal to the int suit argument
-      this.suit = suit;
+         this.suit = suit;
+      }
+      if (rank <ACE || rank > KING)
+      {
+         throw new IllegalArgumentException(rank + " rank is out of bounds");
+      }
+      else
+      {
 // sets a reference rank variable equal to int rank argument      
-      this.rank = rank;
+         this.rank = rank;
+      }
    }
 
 /**when called gets the suit value inputted for the object
@@ -126,7 +140,8 @@ public class Card
    }
 /**boolean method that checks if the object made from the first card input has equal value to that of the second card, where value is based on rank, and
 assigns true or false to the status based on whether or not the card is equal, then returns that status
-@return status returns the status as true if the cards are equal or false if they are not equal*/   
+@return status returns the status as true if the cards are equal or false if they are not equal
+*/   
    public boolean equals(Card otherCard)
    {
 // declares boolean status variable for use to determine equality
